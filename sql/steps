@@ -1,0 +1,2 @@
+odb -d mssql --profile boost --generate-schema --generate-query EsteeMaster.h
+

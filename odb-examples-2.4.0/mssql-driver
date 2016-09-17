@@ -1,0 +1,12 @@
+#! /bin/sh
+opt=
+opt="$opt -U appsupport"
+opt="$opt -P estee123"
+opt="$opt -d odb_test"
+opt="$opt -S 191.191.191.151"
+opt="$opt -x -r -b"
+if test x$1 != x; then
+  exec sqlcmd $opt -i $1
+else
+  exec sqlcmd $opt
+fi
