@@ -49,10 +49,9 @@ public :
 	std::string getEsteeID(){
 		return Estee_ID;
 	}
-	#pragma db id auto
-	unsigned long _id;
 private:
 	friend class odb::access;
+	#pragma db id auto
 	std::string Estee_ID;
 };
 #endif

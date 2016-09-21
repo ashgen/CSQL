@@ -2,7 +2,7 @@
 	"connection":{
 		"host":"191.191.191.119",
 		"user":"appsupport",
-		"password":"este123",
+		"password":"estee123",
 		"database":"Estee"
 	},
 	"logger":{
@@ -10,7 +10,7 @@
 	},
 	"strategy":{
 		"esteeid":"IN0000000002IS04",
-		"startdate":"2012-08-01",
-		"enddate":"2016-09-16"
+		"startdate":"2013-08-01 00:00:00.000",
+		"enddate":"2016-09-16 00:00:00.000"
 	}	
 }

@@ -11,7 +11,8 @@
 #include <string>
 #include <iostream>
 #include <odb/core.hxx>
-#include <boost/date_time/posix_time/ptime.hpp>
+#include <odb/nullable.hxx>
+#include <boost/date_time/posix_time/posix_time.hpp>
 #pragma db value(boost::posix_time::ptime) type("DATETIME")
 
 /*
@@ -28,13 +29,74 @@ Trades	int
 Source	varchar
 Estee_ID	varchar
  */
+#pragma db value
+class id{
+public:
+	boost::posix_time::ptime Date;
+	std::string Estee_ID;
+};
 #pragma db object
 class closingPrice{
 public:
 	closingPrice(){
 		//Declare
 	};
-	boost::posix_time::ptime Date;
+	closingPrice(const closingPrice& a){
+		this->Close_Price=a.Close_Price;
+		this->High_Price=a.High_Price;
+		this->Low_Price=a.Low_Price;
+		this->Net_Traded_Val=a.High_Price;
+		this->Open_Interest=a.Open_Interest;
+		this->Open_Price=a.Open_Price;
+		this->Settlement_price=a.Settlement_price;
+		this->Source=a.Source;
+		this->Trades=a.Trades;
+		this->Volume=a.Volume;
+
+	}
+	closingPrice(const closingPrice* a){
+		this->Close_Price=a->Close_Price;
+		this->High_Price=a->High_Price;
+		this->Low_Price=a->Low_Price;
+		this->Net_Traded_Val=a->High_Price;
+		this->Open_Interest=a->Open_Interest;
+		this->Open_Price=a->Open_Price;
+		this->Settlement_price=a->Settlement_price;
+		this->Source=a->Source;
+		this->Trades=a->Trades;
+		this->Volume=a->Volume;
+
+	}
+	friend std::ostream& operator<<(std::ostream& out,const closingPrice &a){
+		out<<a._id.Estee_ID<<","
+				<<boost::posix_time::to_simple_string(a._id.Date)<<","
+				<<a.Open_Interest<<","
+				<<a.Settlement_price<<","
+				<<a.Open_Price<<","
+				<<a.High_Price<<","
+				<<a.Low_Price<<","
+				<<a.Close_Price<<","
+				<<a.Volume<<","
+				<<a.Net_Traded_Val<<std::endl;
+		return out;
+	}
+	/*
+	const char* asString(){
+		std::string s;
+		std::stringstream out;
+		out<<_id.Estee_ID<<","
+				<<boost::posix_time::to_simple_string(_id.Date)<<","
+				<<Open_Interest<<","
+				<<Settlement_price<<","
+				<<Open_Price<<","
+				<<High_Price<<","
+				<<Low_Price<<","
+				<<Close_Price<<","
+				<<Volume<<","
+				<<Net_Traded_Val;
+		s=out.str();
+		return s.c_str();
+	}*/
 	double Open_Interest;
 	double Settlement_price;
 	double Open_Price;
@@ -46,7 +108,10 @@ public:
 
 	int Trades;
 	std::string Source;
-	std::string Estee_ID;
+#pragma db id
+#pragma db column("")
+	id _id;
+
 };
 
 

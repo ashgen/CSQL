@@ -12,7 +12,7 @@ namespace odb
   access::object_traits< ::EsteeMaster >::
   id (const object_type& o)
   {
-    return o._id;
+    return o.Estee_ID;
   }
 
   inline

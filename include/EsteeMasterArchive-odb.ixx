@@ -4,19 +4,19 @@
 
 namespace odb
 {
-  // EsteeMasterArchive
+  // EsteeMaster_Archive
   //
 
   inline
-  access::object_traits< ::EsteeMasterArchive >::id_type
-  access::object_traits< ::EsteeMasterArchive >::
+  access::object_traits< ::EsteeMaster_Archive >::id_type
+  access::object_traits< ::EsteeMaster_Archive >::
   id (const object_type& o)
   {
     return object_traits< ::EsteeMaster >::id (o);
   }
 
   inline
-  void access::object_traits< ::EsteeMasterArchive >::
+  void access::object_traits< ::EsteeMaster_Archive >::
   callback (database& db, object_type& x, callback_event e)
   {
     ODB_POTENTIALLY_UNUSED (db);
@@ -25,7 +25,7 @@ namespace odb
   }
 
   inline
-  void access::object_traits< ::EsteeMasterArchive >::
+  void access::object_traits< ::EsteeMaster_Archive >::
   callback (database& db, const object_type& x, callback_event e)
   {
     ODB_POTENTIALLY_UNUSED (db);
@@ -36,33 +36,41 @@ namespace odb
 
 namespace odb
 {
-  // EsteeMasterArchive
+  // EsteeMaster_Archive
   //
 
   inline
-  access::object_traits_impl< ::EsteeMasterArchive, id_mssql >::id_type
-  access::object_traits_impl< ::EsteeMasterArchive, id_mssql >::
+  access::object_traits_impl< ::EsteeMaster_Archive, id_mssql >::id_type
+  access::object_traits_impl< ::EsteeMaster_Archive, id_mssql >::
   id (const id_image_type& i)
   {
     return object_traits_impl< ::EsteeMaster, id_mssql >::id (i);
   }
 
   inline
-  void access::object_traits_impl< ::EsteeMasterArchive, id_mssql >::
+  access::object_traits_impl< ::EsteeMaster_Archive, id_mssql >::id_type
+  access::object_traits_impl< ::EsteeMaster_Archive, id_mssql >::
+  id (const image_type& i)
+  {
+    return object_traits_impl< ::EsteeMaster, id_mssql >::id (i);
+  }
+
+  inline
+  void access::object_traits_impl< ::EsteeMaster_Archive, id_mssql >::
   bind (mssql::bind* b, id_image_type& i)
   {
     object_traits_impl< ::EsteeMaster, id_mssql >::bind (b, i);
   }
 
   inline
-  void access::object_traits_impl< ::EsteeMasterArchive, id_mssql >::
+  void access::object_traits_impl< ::EsteeMaster_Archive, id_mssql >::
   init (id_image_type& i, const id_type& id)
   {
     object_traits_impl< ::EsteeMaster, id_mssql >::init (i, id);
   }
 
   inline
-  void access::object_traits_impl< ::EsteeMasterArchive, id_mssql >::
+  void access::object_traits_impl< ::EsteeMaster_Archive, id_mssql >::
   erase (database& db, const object_type& obj)
   {
     callback (db, obj, callback_event::pre_erase);
@@ -71,7 +79,7 @@ namespace odb
   }
 
   inline
-  void access::object_traits_impl< ::EsteeMasterArchive, id_mssql >::
+  void access::object_traits_impl< ::EsteeMaster_Archive, id_mssql >::
   load_ (statements_type& sts,
          object_type& obj,
          bool)

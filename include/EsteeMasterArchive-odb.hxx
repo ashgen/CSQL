@@ -49,25 +49,28 @@
 #endif
 #include <odb/container-traits.hxx>
 #include <odb/no-op-cache-traits.hxx>
+#include <odb/result.hxx>
+#include <odb/simple-object-result.hxx>
 
 #include <odb/details/unused.hxx>
+#include <odb/details/shared-ptr.hxx>
 
 namespace odb
 {
-  // EsteeMasterArchive
+  // EsteeMaster_Archive
   //
   template <>
-  struct class_traits< ::EsteeMasterArchive >
+  struct class_traits< ::EsteeMaster_Archive >
   {
     static const class_kind kind = class_object;
   };
 
   template <>
-  class access::object_traits< ::EsteeMasterArchive >
+  class access::object_traits< ::EsteeMaster_Archive >
   {
     public:
-    typedef ::EsteeMasterArchive object_type;
-    typedef ::boost::shared_ptr< ::EsteeMasterArchive > pointer_type;
+    typedef ::EsteeMaster_Archive object_type;
+    typedef ::boost::shared_ptr< ::EsteeMaster_Archive > pointer_type;
     typedef odb::pointer_traits<pointer_type> pointer_traits;
 
     static const bool polymorphic = false;
@@ -103,14 +106,47 @@ namespace odb
 #include <odb/mssql/forward.hxx>
 #include <odb/mssql/binding.hxx>
 #include <odb/mssql/mssql-types.hxx>
+#include <odb/mssql/query.hxx>
 
 namespace odb
 {
-  // EsteeMasterArchive
+  // EsteeMaster_Archive
   //
+  template <typename A>
+  struct query_columns< ::EsteeMaster_Archive, id_mssql, A >:
+    query_columns< ::EsteeMaster, id_mssql, A >
+  {
+    // EsteeMaster
+    //
+    typedef query_columns< ::EsteeMaster, id_mssql, A > EsteeMaster;
+
+    // ID
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        int,
+        mssql::id_int >::query_type,
+      mssql::id_int >
+    ID_type_;
+
+    static const ID_type_ ID;
+  };
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster_Archive, id_mssql, A >::ID_type_
+  query_columns< ::EsteeMaster_Archive, id_mssql, A >::
+  ID (A::table_name, "[ID]", 0);
+
+  template <typename A>
+  struct pointer_query_columns< ::EsteeMaster_Archive, id_mssql, A >:
+    query_columns< ::EsteeMaster_Archive, id_mssql, A >
+  {
+  };
+
   template <>
-  class access::object_traits_impl< ::EsteeMasterArchive, id_mssql >:
-    public access::object_traits< ::EsteeMasterArchive >
+  class access::object_traits_impl< ::EsteeMaster_Archive, id_mssql >:
+    public access::object_traits< ::EsteeMaster_Archive >
   {
     public:
     static const std::size_t batch = 1UL;
@@ -128,10 +164,12 @@ namespace odb
 
       std::size_t version;
 
+      mssql::change_callback change_callback_;
+
       mssql::change_callback*
       change_callback ()
       {
-        return 0;
+        return &change_callback_;
       }
     };
 
@@ -141,6 +179,9 @@ namespace odb
 
     static id_type
     id (const id_image_type&);
+
+    static id_type
+    id (const image_type&);
 
     static void
     bind (mssql::bind*,
@@ -165,7 +206,9 @@ namespace odb
 
     typedef mssql::object_statements<object_type> statements_type;
 
-    static const std::size_t column_count = 30UL;
+    typedef mssql::query_base query_base_type;
+
+    static const std::size_t column_count = 29UL;
     static const std::size_t id_column_count = 1UL;
     static const std::size_t inverse_column_count = 0UL;
     static const std::size_t readonly_column_count = 0UL;
@@ -180,6 +223,10 @@ namespace odb
     static const char find_statement[];
     static const char update_statement[];
     static const char erase_statement[];
+    static const char query_statement[];
+    static const char erase_query_statement[];
+
+    static const char table_name[];
 
     static void
     persist (database&, object_type&);
@@ -202,6 +249,12 @@ namespace odb
     static void
     erase (database&, const object_type&);
 
+    static result<object_type>
+    query (database&, const query_base_type&);
+
+    static unsigned long long
+    erase_query (database&, const query_base_type&);
+
     public:
     static bool
     find_ (statements_type&,
@@ -214,10 +267,13 @@ namespace odb
   };
 
   template <>
-  class access::object_traits_impl< ::EsteeMasterArchive, id_common >:
-    public access::object_traits_impl< ::EsteeMasterArchive, id_mssql >
+  class access::object_traits_impl< ::EsteeMaster_Archive, id_common >:
+    public access::object_traits_impl< ::EsteeMaster_Archive, id_mssql >
   {
   };
+
+  // EsteeMaster_Archive
+  //
 }
 
 #include "EsteeMasterArchive-odb.ixx"

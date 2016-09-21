@@ -12,12 +12,12 @@
 #include "EsteeMaster.h"
 #include <odb/core.hxx>
 #pragma db object
-class EsteeMasterArchive:public EsteeMaster
+class EsteeMaster_Archive:public EsteeMaster
 {
 public:
-	EsteeMasterArchive(){};
-	EsteeMasterArchive(const EsteeMasterArchive& e){};
-	EsteeMasterArchive(std::string esteeID):EsteeMaster(esteeID){};
+	EsteeMaster_Archive(){};
+	EsteeMaster_Archive(const EsteeMaster_Archive& e){};
+	EsteeMaster_Archive(std::string esteeID):EsteeMaster(esteeID){};
 	int ID;
 
 };

@@ -47,8 +47,11 @@
 #endif
 #include <odb/container-traits.hxx>
 #include <odb/no-op-cache-traits.hxx>
+#include <odb/result.hxx>
+#include <odb/simple-object-result.hxx>
 
 #include <odb/details/unused.hxx>
+#include <odb/details/shared-ptr.hxx>
 
 namespace odb
 {
@@ -70,7 +73,7 @@ namespace odb
 
     static const bool polymorphic = false;
 
-    typedef long unsigned int id_type;
+    typedef ::std::string id_type;
 
     static const bool auto_id = true;
 
@@ -101,11 +104,498 @@ namespace odb
 #include <odb/mssql/forward.hxx>
 #include <odb/mssql/binding.hxx>
 #include <odb/mssql/mssql-types.hxx>
+#include <odb/mssql/query.hxx>
 
 namespace odb
 {
   // EsteeMaster
   //
+  template <typename A>
+  struct query_columns< ::EsteeMaster, id_mssql, A >
+  {
+    // DataFeed_Ticker
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        ::std::string,
+        mssql::id_string >::query_type,
+      mssql::id_string >
+    DataFeed_Ticker_type_;
+
+    static const DataFeed_Ticker_type_ DataFeed_Ticker;
+
+    // Underlying_Ticker
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        ::std::string,
+        mssql::id_string >::query_type,
+      mssql::id_string >
+    Underlying_Ticker_type_;
+
+    static const Underlying_Ticker_type_ Underlying_Ticker;
+
+    // ISIN
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        ::std::string,
+        mssql::id_string >::query_type,
+      mssql::id_string >
+    ISIN_type_;
+
+    static const ISIN_type_ ISIN;
+
+    // Exchange_Code
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        ::std::string,
+        mssql::id_string >::query_type,
+      mssql::id_string >
+    Exchange_Code_type_;
+
+    static const Exchange_Code_type_ Exchange_Code;
+
+    // Option_Type
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        ::std::string,
+        mssql::id_string >::query_type,
+      mssql::id_string >
+    Option_Type_type_;
+
+    static const Option_Type_type_ Option_Type;
+
+    // Status
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        ::std::string,
+        mssql::id_string >::query_type,
+      mssql::id_string >
+    Status_type_;
+
+    static const Status_type_ Status;
+
+    // TOKEN2
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        ::std::string,
+        mssql::id_string >::query_type,
+      mssql::id_string >
+    TOKEN2_type_;
+
+    static const TOKEN2_type_ TOKEN2;
+
+    // Expiry_Date2
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        ::std::string,
+        mssql::id_string >::query_type,
+      mssql::id_string >
+    Expiry_Date2_type_;
+
+    static const Expiry_Date2_type_ Expiry_Date2;
+
+    // SERIES
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        ::std::string,
+        mssql::id_string >::query_type,
+      mssql::id_string >
+    SERIES_type_;
+
+    static const SERIES_type_ SERIES;
+
+    // Source
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        ::std::string,
+        mssql::id_string >::query_type,
+      mssql::id_string >
+    Source_type_;
+
+    static const Source_type_ Source;
+
+    // UnderlyingEstee_Id
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        ::std::string,
+        mssql::id_string >::query_type,
+      mssql::id_string >
+    UnderlyingEstee_Id_type_;
+
+    static const UnderlyingEstee_Id_type_ UnderlyingEstee_Id;
+
+    // Strike_Price
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        double,
+        mssql::id_float8 >::query_type,
+      mssql::id_float8 >
+    Strike_Price_type_;
+
+    static const Strike_Price_type_ Strike_Price;
+
+    // Tick_Size
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        double,
+        mssql::id_float8 >::query_type,
+      mssql::id_float8 >
+    Tick_Size_type_;
+
+    static const Tick_Size_type_ Tick_Size;
+
+    // Lot_Size
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        int,
+        mssql::id_int >::query_type,
+      mssql::id_int >
+    Lot_Size_type_;
+
+    static const Lot_Size_type_ Lot_Size;
+
+    // Security_Type
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        int,
+        mssql::id_int >::query_type,
+      mssql::id_int >
+    Security_Type_type_;
+
+    static const Security_Type_type_ Security_Type;
+
+    // Token
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        int,
+        mssql::id_int >::query_type,
+      mssql::id_int >
+    Token_type_;
+
+    static const Token_type_ Token;
+
+    // Quote_Size
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        int,
+        mssql::id_int >::query_type,
+      mssql::id_int >
+    Quote_Size_type_;
+
+    static const Quote_Size_type_ Quote_Size;
+
+    // Instrument_Type
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        int,
+        mssql::id_int >::query_type,
+      mssql::id_int >
+    Instrument_Type_type_;
+
+    static const Instrument_Type_type_ Instrument_Type;
+
+    // TradingCurrency
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        int,
+        mssql::id_int >::query_type,
+      mssql::id_int >
+    TradingCurrency_type_;
+
+    static const TradingCurrency_type_ TradingCurrency;
+
+    // SettlementCurrency
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        int,
+        mssql::id_int >::query_type,
+      mssql::id_int >
+    SettlementCurrency_type_;
+
+    static const SettlementCurrency_type_ SettlementCurrency;
+
+    // TickSizeSlabId
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        int,
+        mssql::id_int >::query_type,
+      mssql::id_int >
+    TickSizeSlabId_type_;
+
+    static const TickSizeSlabId_type_ TickSizeSlabId;
+
+    // AsOfDate
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        ::boost::posix_time::ptime,
+        mssql::id_datetime >::query_type,
+      mssql::id_datetime >
+    AsOfDate_type_;
+
+    static const AsOfDate_type_ AsOfDate;
+
+    // Last_update_time
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        ::boost::posix_time::ptime,
+        mssql::id_datetime >::query_type,
+      mssql::id_datetime >
+    Last_update_time_type_;
+
+    static const Last_update_time_type_ Last_update_time;
+
+    // Expiry_Date
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        ::boost::posix_time::ptime,
+        mssql::id_datetime >::query_type,
+      mssql::id_datetime >
+    Expiry_Date_type_;
+
+    static const Expiry_Date_type_ Expiry_Date;
+
+    // SettlementDate
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        ::boost::posix_time::ptime,
+        mssql::id_datetime >::query_type,
+      mssql::id_datetime >
+    SettlementDate_type_;
+
+    static const SettlementDate_type_ SettlementDate;
+
+    // TradingStartDate
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        ::boost::posix_time::ptime,
+        mssql::id_datetime >::query_type,
+      mssql::id_datetime >
+    TradingStartDate_type_;
+
+    static const TradingStartDate_type_ TradingStartDate;
+
+    // LastTradingDate
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        ::boost::posix_time::ptime,
+        mssql::id_datetime >::query_type,
+      mssql::id_datetime >
+    LastTradingDate_type_;
+
+    static const LastTradingDate_type_ LastTradingDate;
+
+    // Estee_ID
+    //
+    typedef
+    mssql::query_column<
+      mssql::value_traits<
+        ::std::string,
+        mssql::id_string >::query_type,
+      mssql::id_string >
+    Estee_ID_type_;
+
+    static const Estee_ID_type_ Estee_ID;
+  };
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::DataFeed_Ticker_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  DataFeed_Ticker (A::table_name, "[DataFeed_Ticker]", 0, 512);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::Underlying_Ticker_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  Underlying_Ticker (A::table_name, "[Underlying_Ticker]", 0, 512);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::ISIN_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  ISIN (A::table_name, "[ISIN]", 0, 512);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::Exchange_Code_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  Exchange_Code (A::table_name, "[Exchange_Code]", 0, 512);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::Option_Type_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  Option_Type (A::table_name, "[Option_Type]", 0, 512);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::Status_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  Status (A::table_name, "[Status]", 0, 512);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::TOKEN2_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  TOKEN2 (A::table_name, "[TOKEN2]", 0, 512);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::Expiry_Date2_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  Expiry_Date2 (A::table_name, "[Expiry_Date2]", 0, 512);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::SERIES_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  SERIES (A::table_name, "[SERIES]", 0, 512);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::Source_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  Source (A::table_name, "[Source]", 0, 512);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::UnderlyingEstee_Id_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  UnderlyingEstee_Id (A::table_name, "[UnderlyingEstee_Id]", 0, 512);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::Strike_Price_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  Strike_Price (A::table_name, "[Strike_Price]", 0, 53);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::Tick_Size_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  Tick_Size (A::table_name, "[Tick_Size]", 0, 53);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::Lot_Size_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  Lot_Size (A::table_name, "[Lot_Size]", 0);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::Security_Type_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  Security_Type (A::table_name, "[Security_Type]", 0);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::Token_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  Token (A::table_name, "[Token]", 0);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::Quote_Size_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  Quote_Size (A::table_name, "[Quote_Size]", 0);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::Instrument_Type_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  Instrument_Type (A::table_name, "[Instrument_Type]", 0);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::TradingCurrency_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  TradingCurrency (A::table_name, "[TradingCurrency]", 0);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::SettlementCurrency_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  SettlementCurrency (A::table_name, "[SettlementCurrency]", 0);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::TickSizeSlabId_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  TickSizeSlabId (A::table_name, "[TickSizeSlabId]", 0);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::AsOfDate_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  AsOfDate (A::table_name, "[AsOfDate]", 0, 0, 3);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::Last_update_time_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  Last_update_time (A::table_name, "[Last_update_time]", 0, 0, 3);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::Expiry_Date_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  Expiry_Date (A::table_name, "[Expiry_Date]", 0, 0, 3);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::SettlementDate_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  SettlementDate (A::table_name, "[SettlementDate]", 0, 0, 3);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::TradingStartDate_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  TradingStartDate (A::table_name, "[TradingStartDate]", 0, 0, 3);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::LastTradingDate_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  LastTradingDate (A::table_name, "[LastTradingDate]", 0, 0, 3);
+
+  template <typename A>
+  const typename query_columns< ::EsteeMaster, id_mssql, A >::Estee_ID_type_
+  query_columns< ::EsteeMaster, id_mssql, A >::
+  Estee_ID (A::table_name, "[Estee_ID]", 0, 256);
+
+  template <typename A>
+  struct pointer_query_columns< ::EsteeMaster, id_mssql, A >:
+    query_columns< ::EsteeMaster, id_mssql, A >
+  {
+  };
+
   template <>
   class access::object_traits_impl< ::EsteeMaster, id_mssql >:
     public access::object_traits< ::EsteeMaster >
@@ -117,7 +607,7 @@ namespace odb
 
     struct id_image_type
     {
-      long long id_value;
+      char id_value[257];
       SQLLEN id_size_ind;
 
       std::size_t version;
@@ -260,22 +750,19 @@ namespace odb
       mssql::datetime LastTradingDate_value;
       SQLLEN LastTradingDate_size_ind;
 
-      // _id
-      //
-      long long _id_value;
-      SQLLEN _id_size_ind;
-
       // Estee_ID
       //
-      char Estee_ID_value[513];
+      char Estee_ID_value[257];
       SQLLEN Estee_ID_size_ind;
 
       std::size_t version;
 
+      mssql::change_callback change_callback_;
+
       mssql::change_callback*
       change_callback ()
       {
-        return 0;
+        return &change_callback_;
       }
     };
 
@@ -285,6 +772,9 @@ namespace odb
 
     static id_type
     id (const id_image_type&);
+
+    static id_type
+    id (const image_type&);
 
     static void
     bind (mssql::bind*,
@@ -309,7 +799,9 @@ namespace odb
 
     typedef mssql::object_statements<object_type> statements_type;
 
-    static const std::size_t column_count = 29UL;
+    typedef mssql::query_base query_base_type;
+
+    static const std::size_t column_count = 28UL;
     static const std::size_t id_column_count = 1UL;
     static const std::size_t inverse_column_count = 0UL;
     static const std::size_t readonly_column_count = 0UL;
@@ -324,6 +816,10 @@ namespace odb
     static const char find_statement[];
     static const char update_statement[];
     static const char erase_statement[];
+    static const char query_statement[];
+    static const char erase_query_statement[];
+
+    static const char table_name[];
 
     static void
     persist (database&, object_type&);
@@ -346,6 +842,12 @@ namespace odb
     static void
     erase (database&, const object_type&);
 
+    static result<object_type>
+    query (database&, const query_base_type&);
+
+    static unsigned long long
+    erase_query (database&, const query_base_type&);
+
     public:
     static bool
     find_ (statements_type&,
@@ -362,6 +864,9 @@ namespace odb
     public access::object_traits_impl< ::EsteeMaster, id_mssql >
   {
   };
+
+  // EsteeMaster
+  //
 }
 
 #include "EsteeMaster-odb.ixx"

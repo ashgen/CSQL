@@ -8,7 +8,9 @@
 
 int main(){
 	VolStrategy* p=new VolStrategy("config/config.json");
-	p->getFutureData();
+	p->getAllData();
+	delete p;
+	//p->getUnderlyingData();
 	return 0;
 }
 
