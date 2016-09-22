@@ -6,7 +6,8 @@
 		"database":"Estee"
 	},
 	"logger":{
-		"logfile":"log.txt"
+		"logfile":"log",
+		"archivelogfile":"archive"
 	},
 	"strategy":{
 		"esteeid":"IN0000000002IS04",

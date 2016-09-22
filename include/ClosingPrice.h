@@ -35,7 +35,7 @@ public:
 	boost::posix_time::ptime Date;
 	std::string Estee_ID;
 };
-#pragma db object
+#pragma db object bulk(5000)
 class closingPrice{
 public:
 	closingPrice(){
@@ -77,26 +77,9 @@ public:
 				<<a.Low_Price<<","
 				<<a.Close_Price<<","
 				<<a.Volume<<","
-				<<a.Net_Traded_Val<<std::endl;
+				<<a.Net_Traded_Val;
 		return out;
 	}
-	/*
-	const char* asString(){
-		std::string s;
-		std::stringstream out;
-		out<<_id.Estee_ID<<","
-				<<boost::posix_time::to_simple_string(_id.Date)<<","
-				<<Open_Interest<<","
-				<<Settlement_price<<","
-				<<Open_Price<<","
-				<<High_Price<<","
-				<<Low_Price<<","
-				<<Close_Price<<","
-				<<Volume<<","
-				<<Net_Traded_Val;
-		s=out.str();
-		return s.c_str();
-	}*/
 	double Open_Interest;
 	double Settlement_price;
 	double Open_Price;

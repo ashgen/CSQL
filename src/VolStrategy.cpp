@@ -6,6 +6,9 @@
  */
 
 #include "VolStrategy.h"
+#include "eaCommon.h"
+#include "eaPercentile.h"
+#include "eaBlackScholes.h"
 #include <odb/database.hxx>
 #include <odb/transaction.hxx>
 #include <spdlog/fmt/ostr.h>
@@ -30,6 +33,7 @@ VolStrategy::VolStrategy(const std::string& path){
 	startdate=con->getConfig()->startdate();
 	enddate=con->getConfig()->enddate();
 	logger=con->getConfig()->log();
+	archivelogger=con->getConfig()->archivelog();
 }
 odb::result<closingPrice> VolStrategy::getData(std::string esteeID,btime::ptime startdate,btime::ptime enddate){
 	typedef odb::query<closingPrice> query;
@@ -68,34 +72,65 @@ void VolStrategy::getAllData(){
 	typedef odb::query<closingPrice> pricequery;
 	typedef odb::result<closingPrice> priceresult;
 	transaction t(con->getConnection()->begin());
-	//t.tracer (stderr_tracer);
+	t.tracer (stderr_tracer);
 	masterresult res;
 	masterquery q(masterquery::UnderlyingEstee_Id==esteeId &&
 			masterquery::Expiry_Date >=startdate &&
 			masterquery::Expiry_Date <=enddate &&
-			masterquery::Security_Type.in(4,5,6,7));
+			masterquery::Security_Type.in(eaSecurityType::INDEXSPOT,
+					eaSecurityType::INDEXFUTURES,
+					eaSecurityType::INDEXCALL,
+					eaSecurityType::INDEXPUT)+"ORDER BY"+masterquery::Security_Type);
 	data::getData<EsteeMaster_Archive>(con->getConnection(),q,res);
-
 	for(EsteeMaster_Archive &a:res){
+		if(((std::find(listOfExpiries.begin(),listOfExpiries.end(),a.Expiry_Date)==listOfExpiries.end()) &&
+				!a.Expiry_Date.is_not_a_date_time()))
+			listOfExpiries.push_back(a.Expiry_Date);
+	}
+	std::sort(listOfExpiries.begin(),listOfExpiries.end());
+	for(EsteeMaster_Archive &a:res){
+		archivelogger->info("{}",a);
 		pricequery querydata(pricequery::id.Estee_ID==a.getEsteeID() &&
 				pricequery::id.Date >=startdate &&
-				pricequery::id.Date <=enddate);
+				pricequery::id.Date <=enddate &&
+				pricequery::Open_Interest > 0 &&
+				pricequery::Volume > 0 );
 		priceresult priceres;
+		int index=0;
+
+		std::shared_ptr<FOUnit> unit;
 		data::getData<closingPrice>(con->getConnection(),querydata,priceres);
 		for (closingPrice &r:priceres){
 			logger->info("{}",r);
+			if(a.Security_Type!=eaSecurityType::INDEXSPOT){
+				//Calculate the index
+				index=[&listOfExpiries,r]{auto i=std::lower_bound(listOfExpiries.begin(),listOfExpiries.end(),
+						r._id.Date);
+				auto b=std::find(listOfExpiries.begin(),listOfExpiries.end(),a.Expiry_Date);
+
+					return std::distance(i,b);
+				};
+
+			}
+			if(mDateFOUnit.find(r._id.Date)==mDateFOUnit.end()){
+				unit=std::make_shared<FOUnit>(new FOUnit());
+				mDateFOUnit.insert(std::make_pair(r._id.Date,unit));
+			}else{
+				unit=mDateFOUnit[r._id.Date];
+			}
+
 			switch(a.Security_Type){
 			case 4:
-				listOfClosingPriceUnderlying.push_back(std::shared_ptr<closingPrice>(new closingPrice(r)));
+				unit->spot=std::unique_ptr<Spot>(new Spot(r,a));
 				break;
 			case 5:
-				listOfClosingPriceFuture.push_back(std::shared_ptr<closingPrice>(new closingPrice(r)));
+				unit->future=std::unique_ptr<Spot>(new Future(index,r,a));
 				break;
 			case 6:
-				listOfClosingPriceCall.push_back(std::shared_ptr<closingPrice>(new closingPrice(r)));
+				unit->call=std::unique_ptr<Spot>(new Option(index,r,a));
 				break;
 			case 7:
-				listOfClosingPricePut.push_back(std::shared_ptr<closingPrice>(new closingPrice(r)));
+				unit->put=std::unique_ptr<Spot>(new Option(index,r,a));
 				break;
 			default:
 				break;

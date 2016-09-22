@@ -3,6 +3,7 @@
 	<name>SQLServerDataTransfer</name>
 	<comment></comment>
 	<projects>
+		<project>LinuxTFS</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

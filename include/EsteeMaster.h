@@ -4,10 +4,14 @@
 
 #include <string>
 #include <odb/core.hxx>
-#include <boost/date_time/posix_time/ptime.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 #pragma db value(boost::posix_time::ptime) type("DATETIME")
 #pragma db object
 namespace btime=boost::posix_time;
+
+inline std::ostream& operator<<(std::ostream& out,const btime::ptime& p){
+	return out<<btime::to_simple_string(p);
+}
 class EsteeMaster{
 public :
 
@@ -48,6 +52,36 @@ public :
 	EsteeMaster(const EsteeMaster& e){};
 	std::string getEsteeID(){
 		return Estee_ID;
+	}
+	friend std::ostream& operator<<(std::ostream& out,const EsteeMaster& a){
+		 out<<a.DataFeed_Ticker<<","
+		 <<a.Underlying_Ticker<<","
+		 <<a.ISIN<<","
+		 <<a.Exchange_Code<<","
+		 <<a.Option_Type<<","
+		 <<a.Status<<","
+		 <<a.TOKEN2<<","
+		 <<a.Expiry_Date2<<","
+		 <<a.SERIES<<","
+		 <<a.Source<<","
+		 <<a.UnderlyingEstee_Id<<","
+		 <<a.Strike_Price<<","
+		 <<a.Tick_Size<<","
+		 <<a.Lot_Size<<","
+		 <<a.Security_Type<<","
+		 <<a.Token<<","
+		 <<a.Quote_Size<<","
+		 <<a.Instrument_Type<<","
+		 <<a.TradingCurrency<<","
+		 <<a.SettlementCurrency<<","
+		 <<a.TickSizeSlabId<<","
+		 <<a.AsOfDate<<","
+		 <<a.Last_update_time<<","
+		 <<a.Expiry_Date<<","
+		 <<a.SettlementDate<<","
+		 <<a.TradingStartDate<<","
+		 <<a.LastTradingDate;
+		return out;
 	}
 private:
 	friend class odb::access;

@@ -390,7 +390,7 @@ namespace odb
     public access::object_traits< ::closingPrice >
   {
     public:
-    static const std::size_t batch = 1UL;
+    static const std::size_t batch = 5000UL;
 
     static const bool rowversion = false;
 
@@ -523,6 +523,9 @@ namespace odb
     static void
     persist (database&, const object_type&);
 
+    static void
+    persist (database&, const object_type**, std::size_t, multiple_exceptions&);
+
     static pointer_type
     find (database&, const id_type&);
 
@@ -536,10 +539,19 @@ namespace odb
     update (database&, const object_type&);
 
     static void
+    update (database&, const object_type**, std::size_t, multiple_exceptions&);
+
+    static void
     erase (database&, const id_type&);
 
     static void
     erase (database&, const object_type&);
+
+    static std::size_t
+    erase (database&, const id_type**, std::size_t, multiple_exceptions&);
+
+    static void
+    erase (database&, const object_type**, std::size_t, multiple_exceptions&);
 
     static result<object_type>
     query (database&, const query_base_type&);

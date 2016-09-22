@@ -1,4 +1,4 @@
-INCLUDE_DIR:=include/
+INCLUDE_DIR:=include/ $(HOME)/Linux/References/EsteeAPI/Includes/Internal
 SRC_DIR:=src/
 BIN_DIR:=bin/
 OBJ_DIR:=obj/
