@@ -5,22 +5,17 @@
  *      Author: ashish
  */
 #include "Connection.h"
-#include "json/json.h"
 #include <fstream>
 #include <string>
-std::shared_ptr<ms::database> Connection::getConnection(){
-	if(db !=nullptr)
-		return db;
-	db=std::make_shared<ms::database>(configuration->user(),configuration->password(),
-			configuration->database(),configuration->host());
-	return db;
+#include "json/json.h"
+std::shared_ptr<odb::database> Connection::getConnection() {
+  if (db != nullptr) return db;
+  db = create_database(configuration->user(), configuration->password(),
+                       configuration->database(), configuration->host());
+  return db;
 }
-std::shared_ptr<config> Connection::getConfig(){
-	return configuration;
+std::shared_ptr<config> Connection::getConfig() { return configuration; }
+Connection::Connection(const std::string& path) {
+  db = nullptr;
+  configuration = std::make_shared<config>(path);
 }
-Connection::Connection(const std::string& path){
-	db=nullptr;
-	configuration=std::make_shared<config>(path);
-}
-
-
