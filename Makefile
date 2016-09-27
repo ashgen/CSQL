@@ -27,6 +27,7 @@ all:TestMain
 clean:
 	rm -f $(GEN_FILES)
 	rm -f $(ODB_OBJ) $(OBJ)
+	rm -f $(BIN_DIR)*
 	 
 TestMain:$(ODB_OBJ) $(OBJ) 
 	$(CC) $(CCFLAGS) -o $(BIN_DIR)$@ $(ODB_OBJ) $(OBJ) $(LDFLAGS) 
