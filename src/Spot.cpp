@@ -6,31 +6,15 @@
  */
 #include "Spot.h"
 
-Spot::Spot(const closingPrice& p,const EsteeMaster& e){
-	setPrice(p);
-	setSpec(e);
+Spot::Spot(const closingPrice& p, const EsteeMaster& e) {
+  setPrice(p);
+  setSpec(e);
 }
-std::unique_ptr<closingPrice> Spot::getPrice(){
-	return price;
+closingPrice* Spot::getPrice() const { return price.get(); }
+EsteeMaster* Spot::getSpec() const { return esteemaster.get(); }
 
-}
-std::unique_ptr<EsteeMaster> Spot::getSpec(){
-	return esteemaster;
+void Spot::setPrice(const closingPrice& p) { price.reset(new closingPrice(p)); }
 
-}
-
-void Spot::setPrice(const closingPrice& p){
-	price=std::make_unique<closingPrice>(new closingPrice(p));
-}
-
-void Spot::setSpec(const EsteeMaster& e){
-	esteemaster=std::make_unique<EsteeMaster>(new EsteeMaster_Archive(e));
-}
-
-void Spot::setPrice(const std::unique_ptr<closingPrice> p){
-	price=p;
-}
-
-void Spot::setSpec(const std::unique_ptr<EsteeMaster> s){
-	esteemaster=s;
+void Spot::setSpec(const EsteeMaster& e) {
+  esteemaster.reset(new EsteeMaster(e));
 }

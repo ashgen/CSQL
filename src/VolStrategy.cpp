@@ -139,8 +139,17 @@ void VolStrategy::getAllData() {
   }
   t.commit();
 }
-void VolStrategy::getOptionData() {
-  /*
-  typedef odb::query<closingPrice> query;
-  typedef odb::result<closingPrice> result;*/
+void VolStrategy::calculate(){
+	for(auto &e:mDateFOUnit){
+		logger->info("calculating for the following date{}",e.first());
+		e.second->calculate();
+
+
+	}
+}
+
+void VolStrategy::Initialise(){
+	getAllData();
+	eaBlackScholes::ComputeNRInitialIVEstimate();
+	calculate();
 }

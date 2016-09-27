@@ -14,8 +14,8 @@ public:
 	FOUnit(const FOUnit&);
 	std::unique_ptr<Spot> spot;
 	std::unordered_map<int,std::unique_ptr<Spot>> 	future;
-	std::unordered_map<int,std::unique_ptr<Spot>>	call;
-	std::unordered_map<int,std::unique_ptr<Spot>> 	put;
+	std::unordered_map<int,std::unique_ptr<Option>>	call;
+	std::unordered_map<int,std::unique_ptr<Option>> 	put;
 	void calculate();
 };
 

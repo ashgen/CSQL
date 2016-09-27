@@ -7,15 +7,9 @@
 
 #include "Future.h"
 
-Future::Future(int index,const EsteeMaster& e,const closingPrice& p){
-	this->index=index;
-	this->setPrice(p);
-	this->setSpec(e);
+Future::Future(int index, const EsteeMaster& e, const closingPrice& p)
+    : Spot(p, e) {
+  this->index = index;
 }
 
-Future::Future(int index,const Spot& s){
-	this->index=index;
-	this->setPrice(s.getPrice());
-	this->setSpec(s.getSpec());
-}
-
+Future::Future(int index, const Spot& s) : Spot(s) { this->index = index; }

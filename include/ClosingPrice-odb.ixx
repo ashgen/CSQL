@@ -2,6 +2,8 @@
 // compiler for C++.
 //
 
+#include <odb/database.hxx>
+
 namespace odb
 {
   // closingPrice
@@ -32,56 +34,70 @@ namespace odb
     ODB_POTENTIALLY_UNUSED (x);
     ODB_POTENTIALLY_UNUSED (e);
   }
-}
-
-namespace odb
-{
-  // id
-  //
 
   inline
-  bool access::composite_value_traits< ::id, id_mssql >::
-  get_null (const image_type& i)
+  void access::object_traits_impl< ::closingPrice, id_common >::
+  persist (database& db, const object_type& o)
   {
-    bool r (true);
-    r = r && i.Date_size_ind == SQL_NULL_DATA;
-    r = r && i.Estee_ID_size_ind == SQL_NULL_DATA;
-    return r;
+    function_table[db.id ()]->persist (db, o);
   }
 
   inline
-  void access::composite_value_traits< ::id, id_mssql >::
-  set_null (image_type& i,
-            mssql::statement_kind sk)
+  access::object_traits_impl< ::closingPrice, id_common >::pointer_type
+  access::object_traits_impl< ::closingPrice, id_common >::
+  find (database& db, const id_type& id)
   {
-    ODB_POTENTIALLY_UNUSED (sk);
-
-    using namespace mssql;
-
-    i.Date_size_ind = SQL_NULL_DATA;
-    i.Estee_ID_size_ind = SQL_NULL_DATA;
-  }
-
-  // closingPrice
-  //
-
-  inline
-  void access::object_traits_impl< ::closingPrice, id_mssql >::
-  erase (database& db, const object_type& obj)
-  {
-    callback (db, obj, callback_event::pre_erase);
-    erase (db, id (obj));
-    callback (db, obj, callback_event::post_erase);
+    return function_table[db.id ()]->find1 (db, id);
   }
 
   inline
-  void access::object_traits_impl< ::closingPrice, id_mssql >::
-  load_ (statements_type& sts,
-         object_type& obj,
-         bool)
+  bool access::object_traits_impl< ::closingPrice, id_common >::
+  find (database& db, const id_type& id, object_type& o)
   {
-    ODB_POTENTIALLY_UNUSED (sts);
-    ODB_POTENTIALLY_UNUSED (obj);
+    return function_table[db.id ()]->find2 (db, id, o);
+  }
+
+  inline
+  bool access::object_traits_impl< ::closingPrice, id_common >::
+  reload (database& db, object_type& o)
+  {
+    return function_table[db.id ()]->reload (db, o);
+  }
+
+  inline
+  void access::object_traits_impl< ::closingPrice, id_common >::
+  update (database& db, const object_type& o)
+  {
+    function_table[db.id ()]->update (db, o);
+  }
+
+  inline
+  void access::object_traits_impl< ::closingPrice, id_common >::
+  erase (database& db, const id_type& id)
+  {
+    function_table[db.id ()]->erase1 (db, id);
+  }
+
+  inline
+  void access::object_traits_impl< ::closingPrice, id_common >::
+  erase (database& db, const object_type& o)
+  {
+    function_table[db.id ()]->erase2 (db, o);
+  }
+
+  inline
+  result< access::object_traits_impl< ::closingPrice, id_common >::object_type >
+  access::object_traits_impl< ::closingPrice, id_common >::
+  query (database& db, const query_base_type& q)
+  {
+    return function_table[db.id ()]->query (db, q);
+  }
+
+  inline
+  unsigned long long access::object_traits_impl< ::closingPrice, id_common >::
+  erase_query (database& db, const query_base_type& q)
+  {
+    return function_table[db.id ()]->erase_query (db, q);
   }
 }
 

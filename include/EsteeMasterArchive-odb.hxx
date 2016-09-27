@@ -16,10 +16,7 @@
 #include <odb/boost/smart-ptr/wrapper-traits.hxx>
 #include <odb/boost/optional/wrapper-traits.hxx>
 #include <odb/boost/unordered/container-traits.hxx>
-#include <odb/boost/date-time/mssql/gregorian-traits.hxx>
-#include <odb/boost/date-time/mssql/posix-time-traits.hxx>
 #include <odb/boost/multi-index/container-traits.hxx>
-#include <odb/boost/uuid/mssql/uuid-traits.hxx>
 //
 // End prologue.
 
@@ -49,6 +46,7 @@
 #endif
 #include <odb/container-traits.hxx>
 #include <odb/no-op-cache-traits.hxx>
+#include <odb/query-dynamic.hxx>
 #include <odb/result.hxx>
 #include <odb/simple-object-result.hxx>
 
@@ -98,135 +96,57 @@ namespace odb
     static void
     callback (database&, const object_type&, callback_event);
   };
-}
 
-#include <odb/details/buffer.hxx>
-
-#include <odb/mssql/version.hxx>
-#include <odb/mssql/forward.hxx>
-#include <odb/mssql/binding.hxx>
-#include <odb/mssql/mssql-types.hxx>
-#include <odb/mssql/query.hxx>
-
-namespace odb
-{
-  // EsteeMaster_Archive
-  //
   template <typename A>
-  struct query_columns< ::EsteeMaster_Archive, id_mssql, A >:
-    query_columns< ::EsteeMaster, id_mssql, A >
+  struct query_columns< ::EsteeMaster_Archive, id_common, A >:
+    query_columns< ::EsteeMaster, id_common, A >
   {
     // EsteeMaster
     //
-    typedef query_columns< ::EsteeMaster, id_mssql, A > EsteeMaster;
+    typedef query_columns< ::EsteeMaster, id_common, A > EsteeMaster;
 
     // ID
     //
-    typedef
-    mssql::query_column<
-      mssql::value_traits<
-        int,
-        mssql::id_int >::query_type,
-      mssql::id_int >
-    ID_type_;
+    typedef odb::query_column< int > ID_type_;
 
-    static const ID_type_ ID;
+    static ID_type_ ID;
   };
 
-  template <typename A>
-  const typename query_columns< ::EsteeMaster_Archive, id_mssql, A >::ID_type_
-  query_columns< ::EsteeMaster_Archive, id_mssql, A >::
-  ID (A::table_name, "[ID]", 0);
+#ifdef ODB_COMMON_QUERY_COLUMNS_DEF
 
   template <typename A>
-  struct pointer_query_columns< ::EsteeMaster_Archive, id_mssql, A >:
-    query_columns< ::EsteeMaster_Archive, id_mssql, A >
+  typename query_columns< ::EsteeMaster_Archive, id_common, A >::ID_type_
+  query_columns< ::EsteeMaster_Archive, id_common, A >::ID;
+
+#endif // ODB_COMMON_QUERY_COLUMNS_DEF
+
+  template <typename A>
+  struct pointer_query_columns< ::EsteeMaster_Archive, id_common, A >:
+    query_columns< ::EsteeMaster_Archive, id_common, A >
   {
   };
 
   template <>
-  class access::object_traits_impl< ::EsteeMaster_Archive, id_mssql >:
+  class access::object_traits_impl< ::EsteeMaster_Archive, id_common >:
     public access::object_traits< ::EsteeMaster_Archive >
   {
     public:
-    static const std::size_t batch = 1UL;
+    typedef odb::query_base query_base_type;
 
-    static const bool rowversion = false;
-
-    typedef object_traits_impl< ::EsteeMaster, id_mssql >::id_image_type id_image_type;
-
-    struct image_type: object_traits_impl< ::EsteeMaster, id_mssql >::image_type
+    struct function_table_type
     {
-      // ID
-      //
-      int ID_value;
-      SQLLEN ID_size_ind;
-
-      std::size_t version;
-
-      mssql::change_callback change_callback_;
-
-      mssql::change_callback*
-      change_callback ()
-      {
-        return &change_callback_;
-      }
+      void (*persist) (database&, object_type&);
+      pointer_type (*find1) (database&, const id_type&);
+      bool (*find2) (database&, const id_type&, object_type&);
+      bool (*reload) (database&, object_type&);
+      void (*update) (database&, const object_type&);
+      void (*erase1) (database&, const id_type&);
+      void (*erase2) (database&, const object_type&);
+      result<object_type> (*query) (database&, const query_base_type&);
+      unsigned long long (*erase_query) (database&, const query_base_type&);
     };
 
-    struct extra_statement_cache_type;
-
-    using object_traits<object_type>::id;
-
-    static id_type
-    id (const id_image_type&);
-
-    static id_type
-    id (const image_type&);
-
-    static void
-    bind (mssql::bind*,
-          image_type&,
-          mssql::statement_kind);
-
-    static void
-    bind (mssql::bind*, id_image_type&);
-
-    static void
-    init (image_type&,
-          const object_type&,
-          mssql::statement_kind);
-
-    static void
-    init (object_type&,
-          const image_type&,
-          database*);
-
-    static void
-    init (id_image_type&, const id_type&);
-
-    typedef mssql::object_statements<object_type> statements_type;
-
-    typedef mssql::query_base query_base_type;
-
-    static const std::size_t column_count = 29UL;
-    static const std::size_t id_column_count = 1UL;
-    static const std::size_t inverse_column_count = 0UL;
-    static const std::size_t readonly_column_count = 0UL;
-    static const std::size_t managed_optimistic_column_count = 0UL;
-
-    static const std::size_t separate_load_column_count = 0UL;
-    static const std::size_t separate_update_column_count = 0UL;
-
-    static const bool versioned = false;
-
-    static const char persist_statement[];
-    static const char find_statement[];
-    static const char update_statement[];
-    static const char erase_statement[];
-    static const char query_statement[];
-    static const char erase_query_statement[];
-
-    static const char table_name[];
+    static const function_table_type* function_table[database_count];
 
     static void
     persist (database&, object_type&);
@@ -254,22 +174,6 @@ namespace odb
 
     static unsigned long long
     erase_query (database&, const query_base_type&);
-
-    public:
-    static bool
-    find_ (statements_type&,
-           const id_type*);
-
-    static void
-    load_ (statements_type&,
-           object_type&,
-           bool reload);
-  };
-
-  template <>
-  class access::object_traits_impl< ::EsteeMaster_Archive, id_common >:
-    public access::object_traits_impl< ::EsteeMaster_Archive, id_mssql >
-  {
   };
 
   // EsteeMaster_Archive

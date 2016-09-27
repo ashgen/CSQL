@@ -1,4 +1,6 @@
-INCLUDE_DIR:=include/ $(HOME)/Linux/References/EsteeAPI/Includes/Internal
+INCLUDE_DIR:=include/
+ESTEE_DIR=$(HOME)/Linux/References/EsteeAPI/Includes/Internal
+STRATEGY_COMMON_DIR= $(HOME)/Linux/Strategy/Estee.Linux/Estee.Strategy/Estee.Strategy.Common/
 SRC_DIR:=src/
 BIN_DIR:=bin/
 OBJ_DIR:=obj/
@@ -7,8 +9,8 @@ BOOST_DIR=/usr/local/boost_1_58_0/lib/
 CC:=g++
 CPP := $(wildcard src/*.cpp)
 OBJ := $(addprefix obj/,$(notdir $(CPP:.cpp=.o)))
-CCFLAGS := -Wall -Wno-unknown-pragmas -pedantic -std=c++11 -g -I $(INCLUDE_DIR)  
-LDFLAGS := -lodb-mssql  -lodb  -lodb-boost  -lboost_date_time -lpthread 
+CCFLAGS := -Wall -Wno-unknown-pragmas -pedantic -std=c++11 -g -I $(INCLUDE_DIR) -I $(ESTEE_DIR) -I $(STRATEGY_COMMON_DIR)include -DDATABASE_SQLLITE -DDATABASE_MSSQL
+LDFLAGS := -lodb-mssql  -lodb  -lodb-boost  -lboost_date_time -lpthread  -L $(STRATEGY_COMMON_DIR)lib -lEstee.Strategy.Common
 SQL:= $(INCLUDE_DIR)/ClosingPrice.h\
 		$(INCLUDE_DIR)/EsteeMaster.h\
 		$(INCLUDE_DIR)/EsteeMasterArchive.h

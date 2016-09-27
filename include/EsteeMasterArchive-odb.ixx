@@ -2,6 +2,8 @@
 // compiler for C++.
 //
 
+#include <odb/database.hxx>
+
 namespace odb
 {
   // EsteeMaster_Archive
@@ -32,60 +34,70 @@ namespace odb
     ODB_POTENTIALLY_UNUSED (x);
     ODB_POTENTIALLY_UNUSED (e);
   }
-}
-
-namespace odb
-{
-  // EsteeMaster_Archive
-  //
 
   inline
-  access::object_traits_impl< ::EsteeMaster_Archive, id_mssql >::id_type
-  access::object_traits_impl< ::EsteeMaster_Archive, id_mssql >::
-  id (const id_image_type& i)
+  void access::object_traits_impl< ::EsteeMaster_Archive, id_common >::
+  persist (database& db, object_type& o)
   {
-    return object_traits_impl< ::EsteeMaster, id_mssql >::id (i);
+    function_table[db.id ()]->persist (db, o);
   }
 
   inline
-  access::object_traits_impl< ::EsteeMaster_Archive, id_mssql >::id_type
-  access::object_traits_impl< ::EsteeMaster_Archive, id_mssql >::
-  id (const image_type& i)
+  access::object_traits_impl< ::EsteeMaster_Archive, id_common >::pointer_type
+  access::object_traits_impl< ::EsteeMaster_Archive, id_common >::
+  find (database& db, const id_type& id)
   {
-    return object_traits_impl< ::EsteeMaster, id_mssql >::id (i);
+    return function_table[db.id ()]->find1 (db, id);
   }
 
   inline
-  void access::object_traits_impl< ::EsteeMaster_Archive, id_mssql >::
-  bind (mssql::bind* b, id_image_type& i)
+  bool access::object_traits_impl< ::EsteeMaster_Archive, id_common >::
+  find (database& db, const id_type& id, object_type& o)
   {
-    object_traits_impl< ::EsteeMaster, id_mssql >::bind (b, i);
+    return function_table[db.id ()]->find2 (db, id, o);
   }
 
   inline
-  void access::object_traits_impl< ::EsteeMaster_Archive, id_mssql >::
-  init (id_image_type& i, const id_type& id)
+  bool access::object_traits_impl< ::EsteeMaster_Archive, id_common >::
+  reload (database& db, object_type& o)
   {
-    object_traits_impl< ::EsteeMaster, id_mssql >::init (i, id);
+    return function_table[db.id ()]->reload (db, o);
   }
 
   inline
-  void access::object_traits_impl< ::EsteeMaster_Archive, id_mssql >::
-  erase (database& db, const object_type& obj)
+  void access::object_traits_impl< ::EsteeMaster_Archive, id_common >::
+  update (database& db, const object_type& o)
   {
-    callback (db, obj, callback_event::pre_erase);
-    erase (db, id (obj));
-    callback (db, obj, callback_event::post_erase);
+    function_table[db.id ()]->update (db, o);
   }
 
   inline
-  void access::object_traits_impl< ::EsteeMaster_Archive, id_mssql >::
-  load_ (statements_type& sts,
-         object_type& obj,
-         bool)
+  void access::object_traits_impl< ::EsteeMaster_Archive, id_common >::
+  erase (database& db, const id_type& id)
   {
-    ODB_POTENTIALLY_UNUSED (sts);
-    ODB_POTENTIALLY_UNUSED (obj);
+    function_table[db.id ()]->erase1 (db, id);
+  }
+
+  inline
+  void access::object_traits_impl< ::EsteeMaster_Archive, id_common >::
+  erase (database& db, const object_type& o)
+  {
+    function_table[db.id ()]->erase2 (db, o);
+  }
+
+  inline
+  result< access::object_traits_impl< ::EsteeMaster_Archive, id_common >::object_type >
+  access::object_traits_impl< ::EsteeMaster_Archive, id_common >::
+  query (database& db, const query_base_type& q)
+  {
+    return function_table[db.id ()]->query (db, q);
+  }
+
+  inline
+  unsigned long long access::object_traits_impl< ::EsteeMaster_Archive, id_common >::
+  erase_query (database& db, const query_base_type& q)
+  {
+    return function_table[db.id ()]->erase_query (db, q);
   }
 }
 

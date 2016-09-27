@@ -16,10 +16,7 @@
 #include <odb/boost/smart-ptr/wrapper-traits.hxx>
 #include <odb/boost/optional/wrapper-traits.hxx>
 #include <odb/boost/unordered/container-traits.hxx>
-#include <odb/boost/date-time/mssql/gregorian-traits.hxx>
-#include <odb/boost/date-time/mssql/posix-time-traits.hxx>
 #include <odb/boost/multi-index/container-traits.hxx>
-#include <odb/boost/uuid/mssql/uuid-traits.hxx>
 //
 // End prologue.
 
@@ -47,6 +44,7 @@
 #endif
 #include <odb/container-traits.hxx>
 #include <odb/no-op-cache-traits.hxx>
+#include <odb/query-dynamic.hxx>
 #include <odb/result.hxx>
 #include <odb/simple-object-result.hxx>
 
@@ -96,435 +94,176 @@ namespace odb
     static void
     callback (database&, const object_type&, callback_event);
   };
-}
 
-#include <odb/details/buffer.hxx>
-
-#include <odb/mssql/version.hxx>
-#include <odb/mssql/forward.hxx>
-#include <odb/mssql/binding.hxx>
-#include <odb/mssql/mssql-types.hxx>
-#include <odb/mssql/query.hxx>
-
-namespace odb
-{
-  // id
-  //
-  template <>
-  class access::composite_value_traits< ::id, id_mssql >
-  {
-    public:
-    typedef ::id value_type;
-
-    struct image_type
-    {
-      // Date
-      //
-      mssql::datetime Date_value;
-      SQLLEN Date_size_ind;
-
-      // Estee_ID
-      //
-      char Estee_ID_value[513];
-      SQLLEN Estee_ID_size_ind;
-    };
-
-    static void
-    bind (mssql::bind*,
-          image_type&,
-          mssql::statement_kind);
-
-    static void
-    init (image_type&,
-          const value_type&,
-          mssql::statement_kind);
-
-    static void
-    init (value_type&,
-          const image_type&,
-          database*);
-
-    static bool
-    get_null (const image_type&);
-
-    static void
-    set_null (image_type&,
-              mssql::statement_kind);
-
-    static const std::size_t column_count = 2UL;
-  };
-
-  // closingPrice
-  //
   template <typename A>
-  struct query_columns< ::closingPrice, id_mssql, A >
+  struct query_columns< ::closingPrice, id_common, A >
   {
     // Open_Interest
     //
-    typedef
-    mssql::query_column<
-      mssql::value_traits<
-        double,
-        mssql::id_float8 >::query_type,
-      mssql::id_float8 >
-    Open_Interest_type_;
+    typedef odb::query_column< double > Open_Interest_type_;
 
-    static const Open_Interest_type_ Open_Interest;
+    static Open_Interest_type_ Open_Interest;
 
     // Settlement_price
     //
-    typedef
-    mssql::query_column<
-      mssql::value_traits<
-        double,
-        mssql::id_float8 >::query_type,
-      mssql::id_float8 >
-    Settlement_price_type_;
+    typedef odb::query_column< double > Settlement_price_type_;
 
-    static const Settlement_price_type_ Settlement_price;
+    static Settlement_price_type_ Settlement_price;
 
     // Open_Price
     //
-    typedef
-    mssql::query_column<
-      mssql::value_traits<
-        double,
-        mssql::id_float8 >::query_type,
-      mssql::id_float8 >
-    Open_Price_type_;
+    typedef odb::query_column< double > Open_Price_type_;
 
-    static const Open_Price_type_ Open_Price;
+    static Open_Price_type_ Open_Price;
 
     // High_Price
     //
-    typedef
-    mssql::query_column<
-      mssql::value_traits<
-        double,
-        mssql::id_float8 >::query_type,
-      mssql::id_float8 >
-    High_Price_type_;
+    typedef odb::query_column< double > High_Price_type_;
 
-    static const High_Price_type_ High_Price;
+    static High_Price_type_ High_Price;
 
     // Low_Price
     //
-    typedef
-    mssql::query_column<
-      mssql::value_traits<
-        double,
-        mssql::id_float8 >::query_type,
-      mssql::id_float8 >
-    Low_Price_type_;
+    typedef odb::query_column< double > Low_Price_type_;
 
-    static const Low_Price_type_ Low_Price;
+    static Low_Price_type_ Low_Price;
 
     // Close_Price
     //
-    typedef
-    mssql::query_column<
-      mssql::value_traits<
-        double,
-        mssql::id_float8 >::query_type,
-      mssql::id_float8 >
-    Close_Price_type_;
+    typedef odb::query_column< double > Close_Price_type_;
 
-    static const Close_Price_type_ Close_Price;
+    static Close_Price_type_ Close_Price;
 
     // Volume
     //
-    typedef
-    mssql::query_column<
-      mssql::value_traits<
-        double,
-        mssql::id_float8 >::query_type,
-      mssql::id_float8 >
-    Volume_type_;
+    typedef odb::query_column< double > Volume_type_;
 
-    static const Volume_type_ Volume;
+    static Volume_type_ Volume;
 
     // Net_Traded_Val
     //
-    typedef
-    mssql::query_column<
-      mssql::value_traits<
-        double,
-        mssql::id_float8 >::query_type,
-      mssql::id_float8 >
-    Net_Traded_Val_type_;
+    typedef odb::query_column< double > Net_Traded_Val_type_;
 
-    static const Net_Traded_Val_type_ Net_Traded_Val;
+    static Net_Traded_Val_type_ Net_Traded_Val;
 
     // Trades
     //
-    typedef
-    mssql::query_column<
-      mssql::value_traits<
-        int,
-        mssql::id_int >::query_type,
-      mssql::id_int >
-    Trades_type_;
+    typedef odb::query_column< int > Trades_type_;
 
-    static const Trades_type_ Trades;
+    static Trades_type_ Trades;
 
     // Source
     //
-    typedef
-    mssql::query_column<
-      mssql::value_traits<
-        ::std::string,
-        mssql::id_string >::query_type,
-      mssql::id_string >
-    Source_type_;
+    typedef odb::query_column< ::std::string > Source_type_;
 
-    static const Source_type_ Source;
+    static Source_type_ Source;
 
     // id
     //
     struct id_class_
     {
-      id_class_ ()
-      {
-      }
-
       // Date
       //
-      typedef
-      mssql::query_column<
-        mssql::value_traits<
-          ::boost::posix_time::ptime,
-          mssql::id_datetime >::query_type,
-        mssql::id_datetime >
-      Date_type_;
+      typedef odb::query_column< ::boost::posix_time::ptime > Date_type_;
 
-      static const Date_type_ Date;
+      static Date_type_ Date;
 
       // Estee_ID
       //
-      typedef
-      mssql::query_column<
-        mssql::value_traits<
-          ::std::string,
-          mssql::id_string >::query_type,
-        mssql::id_string >
-      Estee_ID_type_;
+      typedef odb::query_column< ::std::string > Estee_ID_type_;
 
-      static const Estee_ID_type_ Estee_ID;
+      static Estee_ID_type_ Estee_ID;
     };
 
-    static const id_class_ id;
+    static id_class_ id;
   };
 
-  template <typename A>
-  const typename query_columns< ::closingPrice, id_mssql, A >::Open_Interest_type_
-  query_columns< ::closingPrice, id_mssql, A >::
-  Open_Interest (A::table_name, "[Open_Interest]", 0, 53);
+#ifdef ODB_COMMON_QUERY_COLUMNS_DEF
 
   template <typename A>
-  const typename query_columns< ::closingPrice, id_mssql, A >::Settlement_price_type_
-  query_columns< ::closingPrice, id_mssql, A >::
-  Settlement_price (A::table_name, "[Settlement_price]", 0, 53);
+  typename query_columns< ::closingPrice, id_common, A >::Open_Interest_type_
+  query_columns< ::closingPrice, id_common, A >::Open_Interest;
 
   template <typename A>
-  const typename query_columns< ::closingPrice, id_mssql, A >::Open_Price_type_
-  query_columns< ::closingPrice, id_mssql, A >::
-  Open_Price (A::table_name, "[Open_Price]", 0, 53);
+  typename query_columns< ::closingPrice, id_common, A >::Settlement_price_type_
+  query_columns< ::closingPrice, id_common, A >::Settlement_price;
 
   template <typename A>
-  const typename query_columns< ::closingPrice, id_mssql, A >::High_Price_type_
-  query_columns< ::closingPrice, id_mssql, A >::
-  High_Price (A::table_name, "[High_Price]", 0, 53);
+  typename query_columns< ::closingPrice, id_common, A >::Open_Price_type_
+  query_columns< ::closingPrice, id_common, A >::Open_Price;
 
   template <typename A>
-  const typename query_columns< ::closingPrice, id_mssql, A >::Low_Price_type_
-  query_columns< ::closingPrice, id_mssql, A >::
-  Low_Price (A::table_name, "[Low_Price]", 0, 53);
+  typename query_columns< ::closingPrice, id_common, A >::High_Price_type_
+  query_columns< ::closingPrice, id_common, A >::High_Price;
 
   template <typename A>
-  const typename query_columns< ::closingPrice, id_mssql, A >::Close_Price_type_
-  query_columns< ::closingPrice, id_mssql, A >::
-  Close_Price (A::table_name, "[Close_Price]", 0, 53);
+  typename query_columns< ::closingPrice, id_common, A >::Low_Price_type_
+  query_columns< ::closingPrice, id_common, A >::Low_Price;
 
   template <typename A>
-  const typename query_columns< ::closingPrice, id_mssql, A >::Volume_type_
-  query_columns< ::closingPrice, id_mssql, A >::
-  Volume (A::table_name, "[Volume]", 0, 53);
+  typename query_columns< ::closingPrice, id_common, A >::Close_Price_type_
+  query_columns< ::closingPrice, id_common, A >::Close_Price;
 
   template <typename A>
-  const typename query_columns< ::closingPrice, id_mssql, A >::Net_Traded_Val_type_
-  query_columns< ::closingPrice, id_mssql, A >::
-  Net_Traded_Val (A::table_name, "[Net_Traded_Val]", 0, 53);
+  typename query_columns< ::closingPrice, id_common, A >::Volume_type_
+  query_columns< ::closingPrice, id_common, A >::Volume;
 
   template <typename A>
-  const typename query_columns< ::closingPrice, id_mssql, A >::Trades_type_
-  query_columns< ::closingPrice, id_mssql, A >::
-  Trades (A::table_name, "[Trades]", 0);
+  typename query_columns< ::closingPrice, id_common, A >::Net_Traded_Val_type_
+  query_columns< ::closingPrice, id_common, A >::Net_Traded_Val;
 
   template <typename A>
-  const typename query_columns< ::closingPrice, id_mssql, A >::Source_type_
-  query_columns< ::closingPrice, id_mssql, A >::
-  Source (A::table_name, "[Source]", 0, 512);
+  typename query_columns< ::closingPrice, id_common, A >::Trades_type_
+  query_columns< ::closingPrice, id_common, A >::Trades;
 
   template <typename A>
-  const typename query_columns< ::closingPrice, id_mssql, A >::id_class_::Date_type_
-  query_columns< ::closingPrice, id_mssql, A >::id_class_::
-  Date (A::table_name, "[Date]", 0, 0, 3);
+  typename query_columns< ::closingPrice, id_common, A >::Source_type_
+  query_columns< ::closingPrice, id_common, A >::Source;
 
   template <typename A>
-  const typename query_columns< ::closingPrice, id_mssql, A >::id_class_::Estee_ID_type_
-  query_columns< ::closingPrice, id_mssql, A >::id_class_::
-  Estee_ID (A::table_name, "[Estee_ID]", 0, 256);
+  typename query_columns< ::closingPrice, id_common, A >::id_class_::Date_type_
+  query_columns< ::closingPrice, id_common, A >::id_class_::Date;
 
   template <typename A>
-  const typename query_columns< ::closingPrice, id_mssql, A >::id_class_
-  query_columns< ::closingPrice, id_mssql, A >::id;
+  typename query_columns< ::closingPrice, id_common, A >::id_class_::Estee_ID_type_
+  query_columns< ::closingPrice, id_common, A >::id_class_::Estee_ID;
 
   template <typename A>
-  struct pointer_query_columns< ::closingPrice, id_mssql, A >:
-    query_columns< ::closingPrice, id_mssql, A >
+  typename query_columns< ::closingPrice, id_common, A >::id_class_
+  query_columns< ::closingPrice, id_common, A >::id;
+
+#endif // ODB_COMMON_QUERY_COLUMNS_DEF
+
+  template <typename A>
+  struct pointer_query_columns< ::closingPrice, id_common, A >:
+    query_columns< ::closingPrice, id_common, A >
   {
   };
 
   template <>
-  class access::object_traits_impl< ::closingPrice, id_mssql >:
+  class access::object_traits_impl< ::closingPrice, id_common >:
     public access::object_traits< ::closingPrice >
   {
     public:
-    static const std::size_t batch = 5000UL;
+    typedef odb::query_base query_base_type;
 
-    static const bool rowversion = false;
-
-    struct id_image_type
+    struct function_table_type
     {
-      composite_value_traits< ::id, id_mssql >::image_type id_value;
-
-      std::size_t version;
+      void (*persist) (database&, const object_type&);
+      pointer_type (*find1) (database&, const id_type&);
+      bool (*find2) (database&, const id_type&, object_type&);
+      bool (*reload) (database&, object_type&);
+      void (*update) (database&, const object_type&);
+      void (*erase1) (database&, const id_type&);
+      void (*erase2) (database&, const object_type&);
+      result<object_type> (*query) (database&, const query_base_type&);
+      unsigned long long (*erase_query) (database&, const query_base_type&);
     };
 
-    struct image_type
-    {
-      // Open_Interest
-      //
-      double Open_Interest_value;
-      SQLLEN Open_Interest_size_ind;
-
-      // Settlement_price
-      //
-      double Settlement_price_value;
-      SQLLEN Settlement_price_size_ind;
-
-      // Open_Price
-      //
-      double Open_Price_value;
-      SQLLEN Open_Price_size_ind;
-
-      // High_Price
-      //
-      double High_Price_value;
-      SQLLEN High_Price_size_ind;
-
-      // Low_Price
-      //
-      double Low_Price_value;
-      SQLLEN Low_Price_size_ind;
-
-      // Close_Price
-      //
-      double Close_Price_value;
-      SQLLEN Close_Price_size_ind;
-
-      // Volume
-      //
-      double Volume_value;
-      SQLLEN Volume_size_ind;
-
-      // Net_Traded_Val
-      //
-      double Net_Traded_Val_value;
-      SQLLEN Net_Traded_Val_size_ind;
-
-      // Trades
-      //
-      int Trades_value;
-      SQLLEN Trades_size_ind;
-
-      // Source
-      //
-      char Source_value[513];
-      SQLLEN Source_size_ind;
-
-      // _id
-      //
-      composite_value_traits< ::id, id_mssql >::image_type _id_value;
-
-      std::size_t version;
-
-      mssql::change_callback change_callback_;
-
-      mssql::change_callback*
-      change_callback ()
-      {
-        return &change_callback_;
-      }
-    };
-
-    struct extra_statement_cache_type;
-
-    using object_traits<object_type>::id;
-
-    static id_type
-    id (const image_type&);
-
-    static void
-    bind (mssql::bind*,
-          image_type&,
-          mssql::statement_kind);
-
-    static void
-    bind (mssql::bind*, id_image_type&);
-
-    static void
-    init (image_type&,
-          const object_type&,
-          mssql::statement_kind);
-
-    static void
-    init (object_type&,
-          const image_type&,
-          database*);
-
-    static void
-    init (id_image_type&, const id_type&);
-
-    typedef mssql::object_statements<object_type> statements_type;
-
-    typedef mssql::query_base query_base_type;
-
-    static const std::size_t column_count = 12UL;
-    static const std::size_t id_column_count = 2UL;
-    static const std::size_t inverse_column_count = 0UL;
-    static const std::size_t readonly_column_count = 0UL;
-    static const std::size_t managed_optimistic_column_count = 0UL;
-
-    static const std::size_t separate_load_column_count = 0UL;
-    static const std::size_t separate_update_column_count = 0UL;
-
-    static const bool versioned = false;
-
-    static const char persist_statement[];
-    static const char find_statement[];
-    static const char update_statement[];
-    static const char erase_statement[];
-    static const char query_statement[];
-    static const char erase_query_statement[];
-
-    static const char table_name[];
+    static const function_table_type* function_table[database_count];
 
     static void
     persist (database&, const object_type&);
-
-    static void
-    persist (database&, const object_type**, std::size_t, multiple_exceptions&);
 
     static pointer_type
     find (database&, const id_type&);
@@ -539,41 +278,16 @@ namespace odb
     update (database&, const object_type&);
 
     static void
-    update (database&, const object_type**, std::size_t, multiple_exceptions&);
-
-    static void
     erase (database&, const id_type&);
 
     static void
     erase (database&, const object_type&);
-
-    static std::size_t
-    erase (database&, const id_type**, std::size_t, multiple_exceptions&);
-
-    static void
-    erase (database&, const object_type**, std::size_t, multiple_exceptions&);
 
     static result<object_type>
     query (database&, const query_base_type&);
 
     static unsigned long long
     erase_query (database&, const query_base_type&);
-
-    public:
-    static bool
-    find_ (statements_type&,
-           const id_type*);
-
-    static void
-    load_ (statements_type&,
-           object_type&,
-           bool reload);
-  };
-
-  template <>
-  class access::object_traits_impl< ::closingPrice, id_common >:
-    public access::object_traits_impl< ::closingPrice, id_mssql >
-  {
   };
 
   // closingPrice

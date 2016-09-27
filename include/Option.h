@@ -8,16 +8,27 @@
 #ifndef INCLUDE_OPTION_H_
 #define INCLUDE_OPTION_H_
 
-#include "Spot.h"
+#include "Future.h"
 #include "eaBlackScholes.h"
-#include "eaPercentile.h"
 #include "eaFOMarketMakingUnit.h"
-class Option:public Future{
-public:
-	Option();
-	Option(int,Spot*);
-	Option(int,EsteeMaster*,closingPrice*);
-	eaGreeks* greeks;
-	eaMoneyness moneyness;
+#include "eaPercentile.h"
+class Option : public Future {
+ public:
+  Option();
+  Option(int, Spot&);
+  Option(int, EsteeMaster&, closingPrice&);
+  double iv;
+  eaGreeks* greeks;
+  eaMoneyness moneyness;
+  void calculateIV(Future* f);
+  friend std::ostream& operator<<(std::ostream& s, const Option& o);
+
+ private:
+  bool isCall;
+  double strikePrice;
+  double timeToExpiry;
+  double lFuturePrice;
+  double interestRate;
+  double lOptionPrice;
 };
 #endif /* INCLUDE_OPTION_H_ */
