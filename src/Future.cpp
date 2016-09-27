@@ -6,9 +6,8 @@
  */
 
 #include "Future.h"
-
-Future::Future(int index, const EsteeMaster& e, const closingPrice& p)
-    : Spot(p, e) {
+using namespace Underlying;
+Future::Future(int index, EsteeMaster& e, closingPrice& p) : Spot(p, e) {
   this->index = index;
 }
 

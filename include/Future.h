@@ -8,12 +8,13 @@
 #ifndef INCLUDE_FUTURE_H_
 #define INCLUDE_FUTURE_H_
 #include "Spot.h"
+namespace Underlying {
 class Future : public Spot {
  public:
   Future();
   Future(int, const Spot&);
-  Future(int, const EsteeMaster&, const closingPrice&);
+  Future(int, EsteeMaster&, closingPrice&);
   int index;
 };
-
+}
 #endif /* INCLUDE_FUTURE_H_ */

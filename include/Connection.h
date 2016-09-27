@@ -10,7 +10,7 @@
 #pragma once
 #include <spdlog/spdlog.h>
 #include "config.h"
-#include "database.hxx"
+#include "database.h"
 class Connection {
  public:
   Connection(){};

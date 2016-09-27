@@ -11,21 +11,23 @@
 #include "EsteeMaster.h"
 #include "EsteeMasterArchive.h"
 #include "spdlog/logger.h"
+namespace Underlying {
 class Spot {
  public:
   Spot();
   Spot(const Spot& s);
-  Spot(const closingPrice& p, const EsteeMaster& e);
+  Spot(closingPrice& p, EsteeMaster& e);
+  ~Spot();
   closingPrice* getPrice() const;
   EsteeMaster* getSpec() const;
-  void setPrice(const closingPrice& price);
-  void setSpec(const EsteeMaster& master);
+  void setPrice(closingPrice& price);
+  void setSpec(EsteeMaster& master);
 
   std::shared_ptr<spdlog::logger> logger;
 
  private:
-  std::unique_ptr<closingPrice> price;
-  std::unique_ptr<EsteeMaster> esteemaster;
+  closingPrice* price;
+  EsteeMaster* esteemaster;
 };
-
+}
 #endif /* INCLUDE_SPOT_H_ */

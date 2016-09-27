@@ -7,6 +7,7 @@
 
 #include "VolStrategy.h"
 #include <spdlog/fmt/ostr.h>
+#include <iterator>
 #include <odb/database.hxx>
 #include <odb/transaction.hxx>
 using namespace odb::core;
@@ -93,14 +94,13 @@ void VolStrategy::getAllData() {
         pricequery::Open_Interest > 0 && pricequery::Volume > 0);
     priceresult priceres;
     int index = 0;
-
     std::shared_ptr<FOUnit> unit;
     data::getData<closingPrice>(con->getConnection(), querydata, priceres);
     for (closingPrice &r : priceres) {
       logger->info("{}", r);
       if (a.Security_Type != eaSecurityType::INDEXSPOT) {
         // Calculate the index
-        index = [&listOfExpiries, r] {
+        auto funIndex = [this, &r, &a]() -> int {
           auto i = std::lower_bound(listOfExpiries.begin(),
                                     listOfExpiries.end(), r._id.Date);
           auto b = std::find(listOfExpiries.begin(), listOfExpiries.end(),
@@ -108,6 +108,7 @@ void VolStrategy::getAllData() {
 
           return std::distance(i, b);
         };
+        index = funIndex();
       }
       if (mDateFOUnit.find(r._id.Date) == mDateFOUnit.end()) {
         unit = std::make_shared<FOUnit>(new FOUnit());
@@ -118,19 +119,24 @@ void VolStrategy::getAllData() {
 
       switch (a.Security_Type) {
         case 4:
-          unit->spot = std::unique_ptr<Spot>(new Spot(r, a));
+          unit->spot =
+              std::shared_ptr<Underlying::Spot>(new Underlying::Spot(r, a));
           break;
         case 5:
-          unit->future.insert(std::pair<int, std::unique_ptr<Spot>>(
-              index, std::unique_ptr<Spot>(new Future(index, r, a))));
+          unit->future.insert(
+              std::pair<int, std::shared_ptr<Underlying::Future>>(
+                  index, std::shared_ptr<Underlying::Future>(
+                             new Underlying::Future(index, a, r))));
           break;
         case 6:
-          unit->call.insert(std::pair<int, std::unique_ptr<Spot>>(
-              index, std::unique_ptr<Spot>(new Option(index, r, a))));
+          unit->call.insert(std::pair<int, std::shared_ptr<Underlying::Option>>(
+              index, std::shared_ptr<Underlying::Option>(
+                         new Underlying::Option(index, a, r))));
           break;
         case 7:
-          unit->put.insert(std::pair<int, std::unique_ptr<Spot>>(
-              index, std::unique_ptr<Spot>(new Option(index, r, a))));
+          unit->put.insert(std::pair<int, std::shared_ptr<Underlying::Option>>(
+              index, std::shared_ptr<Underlying::Option>(
+                         new Underlying::Option(index, a, r))));
           break;
         default:
           break;
@@ -139,17 +145,15 @@ void VolStrategy::getAllData() {
   }
   t.commit();
 }
-void VolStrategy::calculate(){
-	for(auto &e:mDateFOUnit){
-		logger->info("calculating for the following date{}",e.first());
-		e.second->calculate();
-
-
-	}
+void VolStrategy::calculate() {
+  for (auto &e : mDateFOUnit) {
+    logger->info("calculating for the following date{}", e.first);
+    e.second->calculate();
+  }
 }
 
-void VolStrategy::Initialise(){
-	getAllData();
-	eaBlackScholes::ComputeNRInitialIVEstimate();
-	calculate();
+void VolStrategy::Initialise() {
+  getAllData();
+  eaBlackScholes::ComputeNRInitialIVEstimate();
+  calculate();
 }

@@ -12,6 +12,7 @@
 #include "eaBlackScholes.h"
 #include "eaFOMarketMakingUnit.h"
 #include "eaPercentile.h"
+namespace Underlying {
 class Option : public Future {
  public:
   Option();
@@ -19,16 +20,24 @@ class Option : public Future {
   Option(int, EsteeMaster&, closingPrice&);
   double iv;
   eaGreeks* greeks;
-  eaMoneyness moneyness;
   void calculateIV(Future* f);
   friend std::ostream& operator<<(std::ostream& s, const Option& o);
-
- private:
   bool isCall;
   double strikePrice;
   double timeToExpiry;
   double lFuturePrice;
   double interestRate;
   double lOptionPrice;
+
+ private:
+  /*
+bool isCall;
+double strikePrice;
+double timeToExpiry;
+double lFuturePrice;
+double interestRate;
+double lOptionPrice;
+   */
 };
+}
 #endif /* INCLUDE_OPTION_H_ */
