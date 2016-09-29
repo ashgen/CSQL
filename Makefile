@@ -15,31 +15,36 @@ CC:=g++
 CPP := $(wildcard src/*.cpp)
 OBJ := $(addprefix obj/,$(notdir $(CPP:.cpp=.o)))
 CCFLAGS := -Wall -Wno-unknown-pragmas -pedantic -std=c++11 -g3 -I $(INCLUDE_DIR) -I $(ESTEE_EXT_DIR) -I $(ESTEE_INT_DIR) -I $(STRATEGY_COMMON_DIR)include -I $(OPTION_COMMON_DIR)include -I $(MM_COMMON_DIR)include -DDATABASE_SQLLITE -DDATABASE_MSSQL
-LDFLAGS :=   -L $(ESTEE_STRATEGY_LIB_DIR) -lEstee.OptionsMM -L $(ESTEE_LIBS_DIR) -lEstee.Strategy.Common  -L $(ESTEE_LIBS_DIR) -lEsteeAPI -lactivemq-cpp -lEstee.QuickFix -lonetick -lOtqQueryProcessor -lodb-mssql  -lodb  -lodb-boost -lboost_date_time -lboost_system -lboost_thread -lpthread -lrt -lxml2
-SQL:= $(INCLUDE_DIR)/ClosingPrice.h\
-		$(INCLUDE_DIR)/EsteeMaster.h\
-		$(INCLUDE_DIR)/EsteeMasterArchive.h
-		
-ODB_OBJ= $(addprefix obj/,$(notdir $(SQL:.h=-odb.o)))
+LDFLAGS :=   -L $(ESTEE_STRATEGY_LIB_DIR) -lEstee.OptionsMM -L $(ESTEE_LIBS_DIR) -lEstee.Strategy.Common  -L $(ESTEE_LIBS_DIR) -lEsteeAPI -lactivemq-cpp -lEstee.QuickFix -lonetick -lOtqQueryProcessor -lodb-mssql -lodb-sqlite  -lodb  -lodb-boost -lboost_date_time -lboost_system -lboost_thread -lpthread -lrt -lxml2
+SQL:= $(INCLUDE_DIR)ClosingPrice.h\
+	$(INCLUDE_DIR)EsteeMaster.h\
+	$(INCLUDE_DIR)EsteeMasterArchive.h
+
+ODB_OBJ:= $(addprefix obj/,$(notdir $(SQL:.h=-odb.o)))
+ODB_OBJ+= $(addprefix obj/,$(notdir $(SQL:.h=-odb-mssql.o)))
+ODB_OBJ+= $(addprefix obj/,$(notdir $(SQL:.h=-odb-sqlite.o)))
 GEN_FILES:= $(INCLUDE_DIR)/*.hxx $(INCLUDE_DIR)/*.ixx $(SRC_DIR)/*.cxx $(SQL_DIR)/*.sql
-all:TestMain
+
+all:odb TestMain
 
 clean:
 	rm -f $(GEN_FILES)
 	rm -f $(ODB_OBJ) $(OBJ)
 	rm -f $(BIN_DIR)*
-	 
+
 TestMain:$(ODB_OBJ) $(OBJ) 
 	$(CC) $(CCFLAGS) -o $(BIN_DIR)$@ $(ODB_OBJ) $(OBJ) $(LDFLAGS) 
 
 $(OBJ_DIR)%.o:$(SRC_DIR)%.cpp
 	$(CC) $(CCFLAGS) -c  $< -o $@ 
 
-$(OBJ_DIR)%-odb.o: $(SRC_DIR)/%-odb.cxx
+$(OBJ_DIR)%.o:$(SRC_DIR)%.cxx
+	@echo $<
 	$(CC) $(CCFLAGS) -c  $< -o $@ 
 
-$(SRC_DIR)/%-odb.cxx:$(INCLUDE_DIR)%.h
-	odb --multi-database dynamic -d common -d mssql -d sqlite --profile boost --generate-schema --generate-query  $<
-	mv *-odb.cxx $(SRC_DIR)/ 
-	mv *.sql $(SQL_DIR)/ 
-	mv *.hxx *.ixx $(INCLUDE_DIR)/ 
+odb:
+	odb --multi-database dynamic -d common -d mssql -d sqlite --profile boost --generate-schema --generate-query  $(SQL)
+	mv *.cxx $(SRC_DIR) 
+	mv *.sql $(SQL_DIR) 
+	mv *.hxx *.ixx $(INCLUDE_DIR)
+
