@@ -5,17 +5,21 @@
  *      Author: ashish
  */
 #include "FOUnit.h"
-FOUnit::FOUnit(const FOUnit* f) {
+FOUnit::FOUnit(std::shared_ptr<spdlog::logger> logger) { this->vollogger = logger; }
+FOUnit::FOUnit(const FOUnit* f) { this->vollogger = f->vollogger; }
+FOUnit::FOUnit(const FOUnit* f, std::shared_ptr<spdlog::logger> logger) {
   this->call = f->call;
   this->future = f->future;
   this->put = f->put;
   this->spot = f->spot;
+  this->vollogger = logger;
 }
-FOUnit::FOUnit(const FOUnit& f) {
+FOUnit::FOUnit(const FOUnit& f, std::shared_ptr<spdlog::logger> logger) {
   this->call = f.call;
   this->future = f.future;
   this->put = f.put;
   this->spot = f.spot;
+  this->vollogger = logger;
 }
 void FOUnit::calculate() {
   // Do sense Check and then calculate the IV value
@@ -23,13 +27,29 @@ void FOUnit::calculate() {
     std::cout << "Calculating for index" << e.first;
     auto fut = e.second;
     auto it = call.find(e.first);
-    auto c = it == call.end() ? nullptr : it->second;
+    std::vector<std::shared_ptr<Underlying::Option>> c, p;
+    if (it != call.end()) {
+      c = it->second;
+    }
     it = put.find(e.first);
-    auto p = it == put.end() ? nullptr : it->second;
-    if (c != nullptr && p != nullptr) {
+    if (it != put.end()) {
+      p = it->second;
+    }
+    if (!c.empty() && !p.empty()) {
       // Carry on the calculations
-      c->calculateIV(fut.get());
-      p->calculateIV(fut.get());
+      using namespace Underlying;
+      for (auto a : c) {
+        a->calculateIV(fut.get());
+        vollogger->info("{}", *a);
+      }
+      for (auto a : p) {
+        a->calculateIV(fut.get());
+        vollogger->info("{}", *a);
+      }
     }
   }
 }
+
+double FOUnit::atmIV() { return _atmiv; }
+
+void FOUnit::setAtmIV() {}

@@ -1,17 +1,19 @@
 {
+	
 	"connection":{
-		"host":"191.191.191.119",
-		"user":"appsupport",
+		"host":"127.0.0.1",
+		"user":"estee",
 		"password":"estee123",
-		"database":"Estee"
+		"database":"estee"
 	},
 	"logger":{
-		"logfile":"log",
-		"archivelogfile":"archive"
+		"logfile":"log/log",
+		"archivelogfile":"log/archive",
+		"vollogfile":"log/vol"
 	},
 	"strategy":{
 		"esteeid":"IN0000000002IS04",
-		"startdate":"2013-08-01 00:00:00.000",
+		"startdate":"2016-08-01 00:00:00.000",
 		"enddate":"2016-09-16 00:00:00.000"
 	}	
 }

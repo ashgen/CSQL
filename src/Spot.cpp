@@ -22,6 +22,6 @@ Spot::~Spot() {
 closingPrice* Spot::getPrice() const { return price; }
 EsteeMaster* Spot::getSpec() const { return esteemaster; }
 
-void Spot::setPrice(closingPrice& p) { price = &p; }
+void Spot::setPrice(closingPrice& p) { price = new closingPrice(p); }
 
-void Spot::setSpec(EsteeMaster& e) { esteemaster = &e; }
+void Spot::setSpec(EsteeMaster& e) { esteemaster = new EsteeMaster(e); }

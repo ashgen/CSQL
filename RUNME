@@ -1,0 +1,3 @@
+ export LD_LIBRARY_PATH=/home/ashish/Linux/References/EsteeAPI/Libs
+ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/ashish/Platform/Estee.Linux/Estee_LD_LIBRARY
+

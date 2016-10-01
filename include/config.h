@@ -31,6 +31,7 @@ class config {
   btime::ptime enddate() const;
   std::shared_ptr<spdlog::logger> log();
   std::shared_ptr<spdlog::logger> archivelog();
+  std::shared_ptr<spdlog::logger> vollog();
 
  private:
   std::string _host;

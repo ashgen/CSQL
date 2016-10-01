@@ -6,13 +6,10 @@
  */
 #include "VolStrategy.h"
 
-int main(){
-	VolStrategy* p=new VolStrategy("config/config.json");
-	p->getAllData();
-	delete p;
-	//p->getUnderlyingData();
-	return 0;
+int main() {
+  VolStrategy* p = new VolStrategy("config/config.json");
+  p->Initialise();
+  delete p;
+  // p->getUnderlyingData();
+  return 0;
 }
-
-
-

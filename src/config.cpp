@@ -30,15 +30,13 @@ void config::ReadConfigXML(const std::string& config) {
     _archivelogfile = loggerSetting["archivelogfile"].asString();
     _vollogfile = loggerSetting["vollogfile"].asString();
     spdlog::set_async_mode(ASYNC_SIZE);
-    logger =
-        spdlog::rotating_logger_mt("file_logger", _logfile, ASYNC_SIZE * 5, 3);
-    archivelogger = spdlog::rotating_logger_mt(
-        "archive_logger", _archivelogfile, ASYNC_SIZE / 1024, 3);
-    vollogger = spdlog::rotating_logger_mt("vol_logger", _vollogfile,
-                                           ASYNC_SIZE / 1024, 3);
+    logger = spdlog::daily_logger_st("file_logger", _logfile);
+    archivelogger = spdlog::daily_logger_st("archive_logger", _archivelogfile);
+    vollogger = spdlog::daily_logger_st("vol_logger", _vollogfile);
     spdlog::set_level(spdlog::level::info);
     logger->set_pattern("%v");
     archivelogger->set_pattern("%v");
+    vollogger->set_pattern("%v");
     // Parse Data Configuration
     _esteeID = stratSetting["esteeid"].asString();
     _startdate = btime::time_from_string(stratSetting["startdate"].asString());
@@ -62,3 +60,4 @@ btime::ptime config::startdate() const { return _startdate; }
 btime::ptime config::enddate() const { return _enddate; }
 std::shared_ptr<spdlog::logger> config::log() { return logger; }
 std::shared_ptr<spdlog::logger> config::archivelog() { return archivelogger; }
+std::shared_ptr<spdlog::logger> config::vollog() { return vollogger; }

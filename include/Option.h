@@ -28,6 +28,7 @@ class Option : public Future {
   double lFuturePrice;
   double interestRate;
   double lOptionPrice;
+  double moneyness;
 
  private:
   /*

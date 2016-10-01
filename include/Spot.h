@@ -10,6 +10,8 @@
 #include "ClosingPrice.h"
 #include "EsteeMaster.h"
 #include "EsteeMasterArchive.h"
+#include "fmt/format.h"
+#include "fmt/ostream.h"
 #include "spdlog/logger.h"
 namespace Underlying {
 class Spot {

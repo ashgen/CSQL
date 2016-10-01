@@ -26,12 +26,13 @@ class VolStrategy {
   void getUnderlyingData();
   void getAllData();
   void calculate();
-  odb::result<closingPrice> getData(std::string esteeID, btime::ptime startdate,
-                                    btime::ptime enddate);
+  odb::result<closingPrice> getData(std::string esteeID, btime::ptime startdate, btime::ptime enddate);
   void Initialise();
+  void initialiseLogger();
   std::shared_ptr<Connection> con;
   std::shared_ptr<spdlog::logger> logger;
   std::shared_ptr<spdlog::logger> archivelogger;
+  std::shared_ptr<spdlog::logger> vollogger;
 
  private:
   std::vector<btime::ptime> listOfExpiries;
